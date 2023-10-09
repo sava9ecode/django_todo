@@ -1,0 +1,15 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+    <div class="edit-tasks">
+        <h1>Sign up</h1>
+
+        <form method="post" action=".">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <button>Sign up</button>
+        </form>
+    </div>
+{% endblock %}

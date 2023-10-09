@@ -1,0 +1,29 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+    <div class="frontpage">
+        <h1 class="subtitle">{{ category.title }}</h1>
+
+        <div class="columns">
+            <div class="column is-8">
+                <h2 class="subtitle">Tasks</h2>
+
+                {% for task in category.tasks.all %}
+                    <div>
+                        <p><a href="#">{{ task.title }}</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <div class="column is-4">
+                <h2 class="subtitle">Categories</h2>
+
+                {% for category in categories %}
+                    <div>
+                        <p><a href="{% url 'category_detail' category.id %}">{{ category.title }}</a></p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

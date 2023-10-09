@@ -1,0 +1,77 @@
+{% extends 'task/base.html' %}
+
+{% block content %}
+    <div class="frontpage">
+        <div class="columns">
+            <div class="column is-8">
+                <h2 class="subtitle">Tasks</h2>
+
+                <form method="post" action=".">
+                    {% csrf_token %}
+
+                    {{ form.as_p }}
+
+                    <div class="field">
+                        <button class="button is-primary">Submit</button>
+                    </div>
+                </form>
+
+                {% for task in tasks %}
+                    <div class="mb-4 px-4 py-4 has-background-grey-lighter">
+                        <p>
+                            {{ task.title }} - {{ task.created_at|date:"Y-m-d" }}
+                            -
+                            <a href="{% url 'edit_task' task.id %}">Edit</a>
+                            -
+                            {% if task.is_done %}
+                                Completed
+                            {% else %}
+                                <a href="{% url 'mark_completed' task.id %}">Mark complete</a>
+                            {% endif %}
+                            -
+                            <a href="{% url 'delete_task' task.id %}">Delete</a>
+                        </p>
+                    </div>
+                {% endfor %}
+
+                {% if tasks.has_other_pages %}
+                    <nav class="pagination" role="navigation" aria-label="pagination">
+                        {% if posts.has_previous %}
+                            <a class="pagination-previous" href="?page={{ tasks.previous_page_number }}">Previous</a>
+                        {% endif %}
+
+                        {% if tasks.has_next %}
+                            <a class="pagination-next" href="?page={{ tasks.next_page_number }}">Next</a>
+                        {% endif %}
+
+                        <ul class="pagination-list">
+                            {% for i in tasks.paginator.page_range %}
+                                {% if tasks.number == i %}
+                                    <li>
+                                        <a class="pagination-link is-current">{{ i }}</a>
+                                    </li>
+                                {% else %}
+                                    <li>
+                                        <a class="pagination-link" href="?page={{ i }}">{{ i }}</a>
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                        </ul>
+                    </nav>
+                {% endif %}
+            </div>
+
+            <div class="column is-4">
+                <h2 class="subtitle">Categories</h2>
+
+                {% for category in categories %}
+                    <div>
+                        <p>
+                            <a href="{% url 'category_detail' category.id %}">{{ category.title }}</a>
+                        </p>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
